@@ -16,6 +16,9 @@ public class Activity {
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
+    @Column(name = "chat_id", nullable = false)
+    private Long chatId;
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -34,6 +37,14 @@ public class Activity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
     }
 
     public String getName() {

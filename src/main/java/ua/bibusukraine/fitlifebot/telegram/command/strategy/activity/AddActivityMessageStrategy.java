@@ -39,7 +39,9 @@ public class AddActivityMessageStrategy extends TelegramMessageStrategy {
     public SendMessage buildSendMessage() {
         Activity activity = activityHolder.getActivity(message.getChatId());
         if (activity == null) {
-            activityHolder.putActivity(message.getChatId(), new Activity());
+            activity = new Activity();
+            activity.setChatId(message.getChatId());
+            activityHolder.putActivity(message.getChatId(), activity);
             return buildRequestFieldMessage(message.getChatId(), ENTER_ACTIVITY_NAME_MESSAGE);
         }
         if (activity.getName() == null) {
