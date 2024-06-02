@@ -3,8 +3,10 @@ package ua.bibusukraine.fitlifebot.telegram;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -33,15 +35,24 @@ public class TelegramBot extends TelegramLongPollingBot {
             LOGGER.info("Received message: {}", update.getMessage().getText());
             Message message = update.getMessage();
             if (message != null) {
-                SendMessage response = telegramMessageStrategyContext.getStrategy(message).buildSendMessage();
-                sendMessage(response);
+                telegramMessageStrategyContext.getStrategy(message).execute(message);
             }
         }
     }
 
-    private void sendMessage(SendMessage response) {
+    @EventListener
+    public void sendMessage(SendMessage sendMessage) {
         try {
-            execute(response);
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            LOGGER.error("Error while sending message", e);
+        }
+    }
+
+    @EventListener
+    public void sendDocument(SendDocument sendDocument) {
+        try {
+            execute(sendDocument);
         } catch (TelegramApiException e) {
             LOGGER.error("Error while sending message", e);
         }

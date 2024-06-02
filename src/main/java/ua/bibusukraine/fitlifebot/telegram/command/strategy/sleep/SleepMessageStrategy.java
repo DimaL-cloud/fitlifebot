@@ -1,20 +1,27 @@
 package ua.bibusukraine.fitlifebot.telegram.command.strategy.sleep;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
 
-public class SleepMessageStrategy extends TelegramMessageStrategy {
+@Component
+public class SleepMessageStrategy implements TelegramMessageStrategy {
 
-    private final Message message;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public SleepMessageStrategy(Message message) {
-        this.message = message;
+    public SleepMessageStrategy(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
-    public SendMessage buildSendMessage() {
-        return null;
+    public void execute(Message message) {
+    }
+
+    @Override
+    public TelegramCommand getCommand() {
+        return TelegramCommand.SLEEP;
     }
 
 }

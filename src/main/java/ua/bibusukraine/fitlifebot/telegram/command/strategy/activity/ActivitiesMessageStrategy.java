@@ -1,5 +1,7 @@
 package ua.bibusukraine.fitlifebot.telegram.command.strategy.activity;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -10,28 +12,34 @@ import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrat
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivitiesMessageStrategy extends TelegramMessageStrategy {
+@Component
+public class ActivitiesMessageStrategy implements TelegramMessageStrategy {
 
     private static final String CHOOSE_CATEGORY_TEXT = "У цьому розділі ви можете керувати активностями. Оберіть дію";
 
-    private final Message message;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public ActivitiesMessageStrategy(Message message) {
-        this.message = message;
+    public ActivitiesMessageStrategy(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
-    public SendMessage buildSendMessage() {
+    public void execute(Message message) {
         SendMessage response = new SendMessage();
         response.setChatId(message.getChatId().toString());
 
         ReplyKeyboardMarkup keyboardMarkup = getReplyKeyboardMarkup();
         response.setReplyMarkup(keyboardMarkup);
         response.setText(CHOOSE_CATEGORY_TEXT);
-        return response;
+        applicationEventPublisher.publishEvent(response);
     }
 
-    private ReplyKeyboardMarkup getReplyKeyboardMarkup() {
+    @Override
+    public TelegramCommand getCommand() {
+        return TelegramCommand.ACTIVITIES;
+    }
+
+    protected ReplyKeyboardMarkup getReplyKeyboardMarkup() {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
         keyboard.add(getKeyboardRow(TelegramCommand.ADD_ACTIVITY));

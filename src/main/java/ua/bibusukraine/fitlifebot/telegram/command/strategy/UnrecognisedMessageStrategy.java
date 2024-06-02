@@ -1,22 +1,31 @@
 package ua.bibusukraine.fitlifebot.telegram.command.strategy;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 
-public class UnrecognisedMessageStrategy extends TelegramMessageStrategy {
+@Component
+public class UnrecognisedMessageStrategy implements TelegramMessageStrategy {
 
-    private final Message message;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public UnrecognisedMessageStrategy(Message message) {
-        this.message = message;
+    public UnrecognisedMessageStrategy(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
-    public SendMessage buildSendMessage() {
+    public void execute(Message message) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(message.getChatId());
         sendMessage.setText("Нерозпізнана команда");
-        return sendMessage;
+        applicationEventPublisher.publishEvent(sendMessage);
+    }
+
+    @Override
+    public TelegramCommand getCommand() {
+        return TelegramCommand.UNRECOGNISED;
     }
 
 }

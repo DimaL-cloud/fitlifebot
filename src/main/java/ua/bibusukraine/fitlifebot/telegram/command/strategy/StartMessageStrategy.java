@@ -1,5 +1,7 @@
 package ua.bibusukraine.fitlifebot.telegram.command.strategy;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -9,25 +11,31 @@ import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StartMessageStrategy extends TelegramMessageStrategy {
+@Component
+public class StartMessageStrategy implements TelegramMessageStrategy {
 
     private static final String CHOOSE_CATEGORY_TEXT = "Оберіть категорію";
 
-    private final Message message;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public StartMessageStrategy(Message message) {
-        this.message = message;
+    public StartMessageStrategy(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
-    public SendMessage buildSendMessage() {
+    public void execute(Message message) {
         SendMessage response = new SendMessage();
         response.setChatId(message.getChatId().toString());
 
         ReplyKeyboardMarkup keyboardMarkup = getReplyKeyboardMarkup();
         response.setReplyMarkup(keyboardMarkup);
         response.setText(CHOOSE_CATEGORY_TEXT);
-        return response;
+        applicationEventPublisher.publishEvent(response);
+    }
+
+    @Override
+    public TelegramCommand getCommand() {
+        return TelegramCommand.START;
     }
 
     private ReplyKeyboardMarkup getReplyKeyboardMarkup() {

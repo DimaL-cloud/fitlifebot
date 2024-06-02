@@ -1,17 +1,20 @@
 package ua.bibusukraine.fitlifebot.telegram.command.strategy.activity;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import ua.bibusukraine.fitlifebot.TelegramMessageUtil;
 import ua.bibusukraine.fitlifebot.model.Activity;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.repository.ActivityRepository;
 import ua.bibusukraine.fitlifebot.telegram.command.ActivityHolder;
-import ua.bibusukraine.fitlifebot.telegram.command.CommandHolder;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
 
 import java.util.Optional;
 
-public class AddActivityMessageStrategy extends TelegramMessageStrategy {
+@Component
+public class AddActivityMessageStrategy implements TelegramMessageStrategy {
 
     private static final String ENTER_ACTIVITY_NAME_MESSAGE = "Введіть назву активності";
     private static final String ENTER_BURNED_CALORIES_MESSAGE = "Введіть кількість спалених калорій";
@@ -21,54 +24,57 @@ public class AddActivityMessageStrategy extends TelegramMessageStrategy {
     private static final String INCORRECT_INPUT_FORMAT_MESSAGE = "Неправильний формат введення";
     private static final String ACTIVITY_ALREADY_ADDED = "Активність вже додана.";
 
-    private final Message message;
-    private final CommandHolder commandHolder;
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final ActivityHolder activityHolder;
     private final ActivityRepository activityRepository;
 
-    public AddActivityMessageStrategy(Message message,
-                                      CommandHolder commandHolder,
-                                      ActivityHolder activityHolder, ActivityRepository activityRepository) {
-        this.message = message;
-        this.commandHolder = commandHolder;
+    public AddActivityMessageStrategy(ApplicationEventPublisher applicationEventPublisher,
+                                      ActivityHolder activityHolder,
+                                      ActivityRepository activityRepository) {
+        this.applicationEventPublisher = applicationEventPublisher;
         this.activityHolder = activityHolder;
         this.activityRepository = activityRepository;
     }
 
     @Override
-    public SendMessage buildSendMessage() {
+    public void execute(Message message) {
+        SendMessage sendMessage;
         Activity activity = activityHolder.getActivity(message.getChatId());
         if (activity == null) {
             activity = new Activity();
             activity.setChatId(message.getChatId());
             activityHolder.putActivity(message.getChatId(), activity);
-            return buildRequestFieldMessage(message.getChatId(), ENTER_ACTIVITY_NAME_MESSAGE);
-        }
-        if (activity.getName() == null) {
-            return handleNameField(activity);
+            sendMessage = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_ACTIVITY_NAME_MESSAGE);
+        } else if (activity.getName() == null) {
+            sendMessage = handleNameField(activity, message);
         } else if (activity.getBurnedCalories() == null) {
-            return handleBurnedCaloriesField(activity);
+            sendMessage = handleBurnedCaloriesField(activity, message);
         } else if (activity.getSpentTimeInMinutes() == null) {
-            return handleSpentTimeInMinutesField(activity);
+            sendMessage = handleSpentTimeInMinutesField(activity, message);
         } else if (activity.getNotes() == null) {
-            return handleNotesField(activity);
-        }
-        return buildRequestFieldMessage(message.getChatId(), ACTIVITY_ALREADY_ADDED);
+            sendMessage = handleNotesField(activity, message);
+        } else sendMessage = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ACTIVITY_ALREADY_ADDED);
+        applicationEventPublisher.publishEvent(sendMessage);
     }
 
-    private SendMessage handleNameField(Activity activity) {
+    @Override
+    public TelegramCommand getCommand() {
+        return TelegramCommand.ADD_ACTIVITY;
+    }
+
+    private SendMessage handleNameField(Activity activity, Message message) {
         activity.setName(message.getText());
-        return buildRequestFieldMessage(message.getChatId(), ENTER_BURNED_CALORIES_MESSAGE);
+        return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_BURNED_CALORIES_MESSAGE);
     }
 
-    private SendMessage handleBurnedCaloriesField(Activity activity) {
+    private SendMessage handleBurnedCaloriesField(Activity activity, Message message) {
         String input = message.getText();
         Optional<Double> optionalCalories = parseCalories(input);
         if (optionalCalories.isEmpty() || optionalCalories.get() <= 0) {
-            return buildRequestFieldMessage(message.getChatId(), INCORRECT_INPUT_FORMAT_MESSAGE);
+            return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), INCORRECT_INPUT_FORMAT_MESSAGE);
         }
         activity.setBurnedCalories(optionalCalories.get());
-        return buildRequestFieldMessage(message.getChatId(), ENTER_SPENT_TIME_MESSAGE);
+        return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_SPENT_TIME_MESSAGE);
     }
 
     private Optional<Double> parseCalories(String input) {
@@ -79,14 +85,14 @@ public class AddActivityMessageStrategy extends TelegramMessageStrategy {
         }
     }
 
-    private SendMessage handleSpentTimeInMinutesField(Activity activity) {
+    private SendMessage handleSpentTimeInMinutesField(Activity activity, Message message) {
         String input = message.getText();
         Optional<Integer> optionalMinutes = parseMinutes(input);
         if (optionalMinutes.isEmpty() || optionalMinutes.get() <= 0) {
-            return buildRequestFieldMessage(message.getChatId(), INCORRECT_INPUT_FORMAT_MESSAGE);
+            return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), INCORRECT_INPUT_FORMAT_MESSAGE);
         }
         activity.setSpentTimeInMinutes(optionalMinutes.get());
-        return buildRequestFieldMessage(message.getChatId(), ENTER_NOTES_MESSAGE);
+        return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_NOTES_MESSAGE);
     }
 
     private Optional<Integer> parseMinutes(String input) {
@@ -97,14 +103,13 @@ public class AddActivityMessageStrategy extends TelegramMessageStrategy {
         }
     }
 
-    private SendMessage handleNotesField(Activity activity) {
+    private SendMessage handleNotesField(Activity activity, Message message) {
         activity.setNotes(message.getText());
         activityRepository.save(activity);
         activityHolder.removeActivity(message.getChatId());
-        commandHolder.putLastUserCommand(message.getChatId(), TelegramCommand.ACTIVITIES);
-        SendMessage response = buildRequestFieldMessage(message.getChatId(), ACTIVITY_ADDED_MESSAGE);
-        ActivitiesMessageStrategy activitiesMessageStrategy = new ActivitiesMessageStrategy(message);
-        response.setReplyMarkup(activitiesMessageStrategy.buildSendMessage().getReplyMarkup());
+        SendMessage response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ACTIVITY_ADDED_MESSAGE);
+        ActivitiesMessageStrategy activitiesMessageStrategy = new ActivitiesMessageStrategy(applicationEventPublisher);
+        response.setReplyMarkup(activitiesMessageStrategy.getReplyKeyboardMarkup());
         return response;
     }
 
