@@ -1,4 +1,4 @@
-package ua.bibusukraine.fitlifebot.telegram.command;
+package ua.bibusukraine.fitlifebot.cache;
 
 import org.springframework.stereotype.Component;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;

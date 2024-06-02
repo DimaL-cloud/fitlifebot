@@ -8,7 +8,7 @@ import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 import ua.bibusukraine.fitlifebot.model.Activity;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.repository.ActivityRepository;
-import ua.bibusukraine.fitlifebot.telegram.command.ActivityHolder;
+import ua.bibusukraine.fitlifebot.cache.ActivityHolder;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
 
 import java.util.Optional;
@@ -38,23 +38,23 @@ public class AddActivityMessageStrategy implements TelegramMessageStrategy {
 
     @Override
     public void execute(Message message) {
-        SendMessage sendMessage;
+        SendMessage response;
         Activity activity = activityHolder.getActivity(message.getChatId());
         if (activity == null) {
             activity = new Activity();
             activity.setChatId(message.getChatId());
             activityHolder.putActivity(message.getChatId(), activity);
-            sendMessage = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_ACTIVITY_NAME_MESSAGE);
+            response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_ACTIVITY_NAME_MESSAGE);
         } else if (activity.getName() == null) {
-            sendMessage = handleNameField(activity, message);
+            response = handleNameField(activity, message);
         } else if (activity.getBurnedCalories() == null) {
-            sendMessage = handleBurnedCaloriesField(activity, message);
+            response = handleBurnedCaloriesField(activity, message);
         } else if (activity.getSpentTimeInMinutes() == null) {
-            sendMessage = handleSpentTimeInMinutesField(activity, message);
+            response = handleSpentTimeInMinutesField(activity, message);
         } else if (activity.getNotes() == null) {
-            sendMessage = handleNotesField(activity, message);
-        } else sendMessage = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ACTIVITY_ALREADY_ADDED);
-        applicationEventPublisher.publishEvent(sendMessage);
+            response = handleNotesField(activity, message);
+        } else response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ACTIVITY_ALREADY_ADDED);
+        applicationEventPublisher.publishEvent(response);
     }
 
     @Override

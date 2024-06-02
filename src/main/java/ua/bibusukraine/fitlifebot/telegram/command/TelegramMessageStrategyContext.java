@@ -2,6 +2,7 @@ package ua.bibusukraine.fitlifebot.telegram.command;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import ua.bibusukraine.fitlifebot.cache.CommandHolder;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
 
