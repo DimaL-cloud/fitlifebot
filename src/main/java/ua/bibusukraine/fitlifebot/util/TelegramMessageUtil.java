@@ -13,9 +13,7 @@ public class TelegramMessageUtil {
     }
 
     public static SendMessage buildRequestFieldMessage(Long chatId, String text) {
-        SendMessage response = new SendMessage();
-        response.setChatId(chatId);
-        response.setText(text);
+        SendMessage response = buildSendMessage(chatId, text);
         ReplyKeyboardRemove replyKeyboardRemove = new ReplyKeyboardRemove();
         replyKeyboardRemove.setRemoveKeyboard(true);
         response.setReplyMarkup(replyKeyboardRemove);
