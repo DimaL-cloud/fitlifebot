@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: admin
+    hikari:
+      connection-test-query: SELECT 1
+      connection-timeout: 1000
+      minimum-idle: 3
+      max-lifetime: 30000
+
+telegram:
+  bot-name: fit_life_bot
+  bot-token: 7373495110:AAF-ZJFP4R8UVI9NXsWpyfibSKdAk4YwDB8
