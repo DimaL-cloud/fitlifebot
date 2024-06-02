@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import ua.bibusukraine.fitlifebot.TelegramMessageUtil;
+import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 import ua.bibusukraine.fitlifebot.model.Activity;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.repository.ActivityRepository;
