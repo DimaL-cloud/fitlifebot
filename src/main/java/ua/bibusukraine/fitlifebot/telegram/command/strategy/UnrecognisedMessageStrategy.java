@@ -5,9 +5,12 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
+import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 
 @Component
 public class UnrecognisedMessageStrategy implements TelegramMessageStrategy {
+
+    private static final String UNRECOGNISED_MESSAGE = "Нерозпізнана команда";
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -17,9 +20,7 @@ public class UnrecognisedMessageStrategy implements TelegramMessageStrategy {
 
     @Override
     public void execute(Message message) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(message.getChatId());
-        sendMessage.setText("Нерозпізнана команда");
+        SendMessage sendMessage = TelegramMessageUtil.buildSendMessage(message.getChatId(), UNRECOGNISED_MESSAGE);
         applicationEventPublisher.publishEvent(sendMessage);
     }
 

@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
+import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +26,9 @@ public class ActivitiesMessageStrategy implements TelegramMessageStrategy {
 
     @Override
     public void execute(Message message) {
-        SendMessage response = new SendMessage();
-        response.setChatId(message.getChatId().toString());
-
+        SendMessage response = TelegramMessageUtil.buildSendMessage(message.getChatId(), CHOOSE_CATEGORY_TEXT);
         ReplyKeyboardMarkup keyboardMarkup = getReplyKeyboardMarkup();
         response.setReplyMarkup(keyboardMarkup);
-        response.setText(CHOOSE_CATEGORY_TEXT);
         applicationEventPublisher.publishEvent(response);
     }
 

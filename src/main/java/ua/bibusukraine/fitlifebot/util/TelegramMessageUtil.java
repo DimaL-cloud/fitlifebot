@@ -5,6 +5,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRem
 
 public class TelegramMessageUtil {
 
+    public static SendMessage buildSendMessage(Long chatId, String text) {
+        SendMessage response = new SendMessage();
+        response.setChatId(chatId);
+        response.setText(text);
+        return response;
+    }
+
     public static SendMessage buildRequestFieldMessage(Long chatId, String text) {
         SendMessage response = new SendMessage();
         response.setChatId(chatId);

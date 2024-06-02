@@ -24,6 +24,7 @@ import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.repository.ActivityRepository;
 import ua.bibusukraine.fitlifebot.telegram.BotInitializer;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
+import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,7 +52,8 @@ public class GetActivitiesMessageStrategy implements TelegramMessageStrategy {
 
     private Font font;
 
-    public GetActivitiesMessageStrategy(ActivityRepository activityRepository, ApplicationEventPublisher applicationEventPublisher) {
+    public GetActivitiesMessageStrategy(ActivityRepository activityRepository,
+                                        ApplicationEventPublisher applicationEventPublisher) {
         this.activityRepository = activityRepository;
         this.applicationEventPublisher = applicationEventPublisher;
     }
@@ -80,10 +82,8 @@ public class GetActivitiesMessageStrategy implements TelegramMessageStrategy {
             document.close();
         } catch (DocumentException | IOException e) {
             LOGGER.error("Error while creating PDF file: " + e.getMessage());
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(message.getChatId());
-            sendMessage.setText(CREATE_FILE_ERROR_MESSAGE);
-            applicationEventPublisher.publishEvent(sendMessage);
+            SendMessage response = TelegramMessageUtil.buildSendMessage(message.getChatId(), CREATE_FILE_ERROR_MESSAGE);
+            applicationEventPublisher.publishEvent(response);
         }
         SendDocument sendDocument = new SendDocument();
         sendDocument.setChatId(message.getChatId().toString());
