@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 public class TelegramMessageStrategyContext {
 
     private final CommandHolder commandHolder;
-
     private final Map<TelegramCommand, TelegramMessageStrategy> strategyMap;
 
     public TelegramMessageStrategyContext(List<TelegramMessageStrategy> strategies,
