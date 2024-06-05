@@ -20,13 +20,12 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class ReportServiceImpl implements ReportService {
   private static final Logger LOG = LoggerFactory.getLogger(ReportServiceImpl.class);
   private static final String DEFAULT_FILE_PATH = "activities.pdf";
-  private static final int COLUMN_AMOUNT = 5;
-  private static final float[] COLUMN_WIDTHS = {1f, 2f, 2f, 2f, 3f};
   private static final String FONT_PATH = "fonts/Ubuntu-Regular.ttf";
   private Font font;
 
@@ -39,7 +38,7 @@ public class ReportServiceImpl implements ReportService {
   @Override
   public <T> File getReport(List<T> items, Class<?> clazz) throws DocumentException, FileNotFoundException {
     Document document = createDocumentFrame(clazz);
-    PdfPTable table = createTableFrame();
+    PdfPTable table = createTableFrame(clazz);
     addHeaders(table, clazz);
     fillTable(table, items, clazz);
     document.add(table);
@@ -62,9 +61,14 @@ public class ReportServiceImpl implements ReportService {
     return document;
   }
 
-  private PdfPTable createTableFrame() throws DocumentException {
-    PdfPTable table = new PdfPTable(COLUMN_AMOUNT);
-    table.setWidths(COLUMN_WIDTHS);
+  private PdfPTable createTableFrame(Class<?> clazz) throws DocumentException {
+    int[] columnWidth = Arrays.stream(clazz.getDeclaredFields())
+            .filter(field -> field.isAnnotationPresent(ReportInclude.class))
+            .map(field -> field.getAnnotation(ReportInclude.class)
+                    .columnWidth()).mapToInt(Integer::intValue).toArray();
+
+    PdfPTable table = new PdfPTable(columnWidth.length);
+    table.setWidths(columnWidth);
     return table;
   }
 

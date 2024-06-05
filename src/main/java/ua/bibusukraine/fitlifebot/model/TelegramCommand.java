@@ -10,8 +10,14 @@ public enum TelegramCommand {
     WEIGHT("Вага ⚖\uFE0F"),
     SLEEP("Сон \uD83D\uDE34"),
     ADD_ACTIVITY("Додати активність"),
+    ADD_SLEEP("Додати сон"),
+    ADD_WEIGHT("Додати вагу"),
     REMOVE_ACTIVITY("Видалити активність"),
+    REMOVE_SLEEP("Видалити сон"),
+    REMOVE_WEIGHT("Видалити вагу"),
     GET_ACTIVITIES_REPORT("Отримати звіт по активностям"),
+    GET_SLEEP_REPORT("Отримати звіт по записам сну"),
+    GET_WEIGHT_REPORT("Отримати звіт по записам ваги"),
     BACK("Назад"),
     UNRECOGNISED("Не впізнано");
 

@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ReportInclude {
-//  int order() default -1;
+  int columnWidth() default 2;
   String title() default "";
   String columnName() default "";
 }

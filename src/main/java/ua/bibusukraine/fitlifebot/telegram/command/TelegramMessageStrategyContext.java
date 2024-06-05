@@ -36,6 +36,11 @@ public class TelegramMessageStrategyContext {
             command = switch (lastUserCommand) {
                 case ADD_ACTIVITY -> TelegramCommand.ADD_ACTIVITY;
                 case REMOVE_ACTIVITY -> TelegramCommand.REMOVE_ACTIVITY;
+                case ADD_SLEEP -> TelegramCommand.ADD_SLEEP;
+                case REMOVE_SLEEP -> TelegramCommand.REMOVE_SLEEP;
+                case ADD_WEIGHT -> TelegramCommand.ADD_WEIGHT;
+                case REMOVE_WEIGHT -> TelegramCommand.REMOVE_WEIGHT;
+                case GET_WEIGHT_REPORT -> TelegramCommand.GET_WEIGHT_REPORT;
                 default -> command;
             };
         }
@@ -43,7 +48,7 @@ public class TelegramMessageStrategyContext {
     }
 
     private void updateLastUserCommand(TelegramCommand command, Long chatId) {
-        if (command != TelegramCommand.UNRECOGNISED) {
+         if (command != TelegramCommand.UNRECOGNISED) {
             commandHolder.putLastUserCommand(chatId, command);
         }
     }
