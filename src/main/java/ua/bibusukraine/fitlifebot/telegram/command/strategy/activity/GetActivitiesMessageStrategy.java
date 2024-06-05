@@ -46,8 +46,6 @@ public class GetActivitiesMessageStrategy implements TelegramMessageStrategy {
     private static final String SPENT_TIME_COLUMN_NAME = "Витрачений час (хв)";
     private static final String NOTES_COLUMN_NAME = "Замітки";
     private static final String CREATE_FILE_ERROR_MESSAGE = "Помилка при створенні файлу";
-    private static final String BURNED_CALORIES_SUM_MESSAGE = "Сумарна кількість спалених калорій: ";
-    private static final String TIME_SPENT_SUM_MESSAGE = "Сумарний витрачений час: %s хв";
 
     private final ActivityRepository activityRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -77,16 +75,6 @@ public class GetActivitiesMessageStrategy implements TelegramMessageStrategy {
             title.setSpacingAfter(20);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
-            Paragraph caloriesBurnedSum = new Paragraph(BURNED_CALORIES_SUM_MESSAGE +
-                    calculateCaloriesBurnedSum(activityRepository.findActivitiesByChatId(message.getChatId())), font);
-            caloriesBurnedSum.setAlignment(Element.ALIGN_LEFT);
-            document.add(caloriesBurnedSum);
-            Integer timeSpentSum = calculateTimeSpentSum(activityRepository.findActivitiesByChatId(message.getChatId()));
-            Paragraph timeSpentSumParagraph = new Paragraph(String.format(TIME_SPENT_SUM_MESSAGE, timeSpentSum), font);
-            timeSpentSumParagraph.setAlignment(Element.ALIGN_LEFT);
-            timeSpentSumParagraph.setSpacingAfter(20);
-            document.add(timeSpentSumParagraph);
-
             PdfPTable table = createTable();
             List<Activity> activities = activityRepository.findActivitiesByChatId(message.getChatId());
             activities.forEach(activity -> addActivityToTable(table, activity));
@@ -131,18 +119,6 @@ public class GetActivitiesMessageStrategy implements TelegramMessageStrategy {
         PdfPCell cell = new PdfPCell(new Phrase(text, font));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
-    }
-
-    private Double calculateCaloriesBurnedSum(List<Activity> activities) {
-        return activities.stream()
-                .map(Activity::getBurnedCalories)
-                .reduce(0.0, Double::sum);
-    }
-
-    private Integer calculateTimeSpentSum(List<Activity> activities) {
-        return activities.stream()
-                .map(Activity::getSpentTimeInMinutes)
-                .reduce(0, Integer::sum);
     }
 
 }
