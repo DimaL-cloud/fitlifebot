@@ -6,29 +6,36 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import ua.bibusukraine.fitlifebot.annotation.ReportInclude;
 
 @Entity
 @Table(name = "activity")
+@ReportInclude(title = "Звіт по активностям")
 public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
+    @ReportInclude(columnName = "Айді")
     private Long id;
 
     @Column(name = "chat_id", nullable = false)
     private Long chatId;
 
     @Column(name = "name", nullable = false)
+    @ReportInclude(columnName = "Назва")
     private String name;
 
     @Column(name = "burned_calories")
+    @ReportInclude(columnName = "Кількість спалених калорій")
     private Double burnedCalories;
 
     @Column(name = "spent_time_in_minutes")
+    @ReportInclude(columnName = "Витрачений час (хв)")
     private Integer spentTimeInMinutes;
 
     @Column(name = "notes")
+    @ReportInclude(columnName = "Замітки")
     private String notes;
 
     public Long getId() {
