@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ua.bibusukraine.fitlifebot.cache.SleepHolder;
+import ua.bibusukraine.fitlifebot.model.RequestFieldMessage;
 import ua.bibusukraine.fitlifebot.model.Sleep;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.repository.SleepRepository;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
-import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 
 import java.util.Optional;
 
@@ -45,7 +45,7 @@ public class RemoveSleepMessageStrategy implements TelegramMessageStrategy {
         Sleep removedSleep = new Sleep();
         removedSleep.setChatId(message.getChatId());
         sleepHolder.putSleep(message.getChatId(), removedSleep);
-        SendMessage response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_SLEEP_ID_MESSAGE);
+        SendMessage response = new RequestFieldMessage(message.getChatId().toString(), ENTER_SLEEP_ID_MESSAGE);
         applicationEventPublisher.publishEvent(response);
     }
 
@@ -60,7 +60,7 @@ public class RemoveSleepMessageStrategy implements TelegramMessageStrategy {
 
     private void handleInvalidActivity(Message message) {
         sleepHolder.removeSleep(message.getChatId());
-        SendMessage response = TelegramMessageUtil.buildSendMessage(message.getChatId(), SLEEP_NOT_FOUND_MESSAGE);
+        SendMessage response = new SendMessage(message.getChatId().toString(), SLEEP_NOT_FOUND_MESSAGE);
         SleepMessageStrategy activitiesMessageStrategy = new SleepMessageStrategy(applicationEventPublisher);
         response.setReplyMarkup(activitiesMessageStrategy.getReplyKeyboardMarkup());
         applicationEventPublisher.publishEvent(response);
@@ -69,7 +69,7 @@ public class RemoveSleepMessageStrategy implements TelegramMessageStrategy {
     private void removeActivity(Message message, Long activityId) {
         sleepRepository.deleteById(activityId);
         sleepHolder.removeSleep(message.getChatId());
-        SendMessage response = TelegramMessageUtil.buildSendMessage(message.getChatId(), SLEEP_REMOVED_MESSAGE);
+        SendMessage response = new SendMessage(message.getChatId().toString(), SLEEP_REMOVED_MESSAGE);
         SleepMessageStrategy activitiesMessageStrategy = new SleepMessageStrategy(applicationEventPublisher);
         response.setReplyMarkup(activitiesMessageStrategy.getReplyKeyboardMarkup());
         applicationEventPublisher.publishEvent(response);

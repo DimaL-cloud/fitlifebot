@@ -14,9 +14,7 @@ import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.model.Weight;
 import ua.bibusukraine.fitlifebot.repository.WeightRepository;
 import ua.bibusukraine.fitlifebot.services.ReportService;
-import ua.bibusukraine.fitlifebot.telegram.BotInitializer;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
-import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +27,7 @@ import java.util.Map;
 
 @Component
 public class GetWeightMessageStrategy implements TelegramMessageStrategy {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BotInitializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetWeightMessageStrategy.class);
     private static final String CREATE_FILE_ERROR_MESSAGE = "Error creating the file";
     private static final String ENTER_START_DATE_MESSAGE = "Please enter the start date in the format dd.MM.yyyy";
     private static final String ENTER_END_DATE_MESSAGE = "Please enter the end date in the format dd.MM.yyyy";
@@ -97,7 +95,7 @@ public class GetWeightMessageStrategy implements TelegramMessageStrategy {
     }
 
     private void sendMessage(Long chatId, String text) {
-        SendMessage response = TelegramMessageUtil.buildSendMessage(chatId, text);
+        SendMessage response = new SendMessage(chatId.toString(), text);
         applicationEventPublisher.publishEvent(response);
     }
 

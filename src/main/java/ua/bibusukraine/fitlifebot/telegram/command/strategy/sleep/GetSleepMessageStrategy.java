@@ -13,16 +13,14 @@ import ua.bibusukraine.fitlifebot.model.Sleep;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.repository.SleepRepository;
 import ua.bibusukraine.fitlifebot.services.ReportService;
-import ua.bibusukraine.fitlifebot.telegram.BotInitializer;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
-import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 
 import java.io.File;
 import java.io.IOException;
 
 @Component
 public class GetSleepMessageStrategy implements TelegramMessageStrategy {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BotInitializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetSleepMessageStrategy.class);
     private static final String CREATE_FILE_ERROR_MESSAGE = "Помилка при створенні файлу";
     private final SleepRepository sleepRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -44,7 +42,7 @@ public class GetSleepMessageStrategy implements TelegramMessageStrategy {
             applicationEventPublisher.publishEvent(sendDocument);
         } catch (DocumentException | IOException | RuntimeException e) {
             LOGGER.error("Error while creating PDF file: {}", e.getMessage());
-            SendMessage response = TelegramMessageUtil.buildSendMessage(message.getChatId(), CREATE_FILE_ERROR_MESSAGE);
+            SendMessage response = new SendMessage(message.getChatId().toString(), CREATE_FILE_ERROR_MESSAGE);
             applicationEventPublisher.publishEvent(response);
         }
     }

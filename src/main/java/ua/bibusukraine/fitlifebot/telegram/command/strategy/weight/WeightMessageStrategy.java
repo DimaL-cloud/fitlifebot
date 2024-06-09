@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
-import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class WeightMessageStrategy implements TelegramMessageStrategy {
 
     @Override
     public void execute(Message message) {
-        SendMessage response = TelegramMessageUtil.buildSendMessage(message.getChatId(), CHOOSE_SLEEP_ACTION_TEXT);
+        SendMessage response = new SendMessage(message.getChatId().toString(), CHOOSE_SLEEP_ACTION_TEXT);
         ReplyKeyboardMarkup keyboardMarkup = getReplyKeyboardMarkup();
         response.setReplyMarkup(keyboardMarkup);
         applicationEventPublisher.publishEvent(response);

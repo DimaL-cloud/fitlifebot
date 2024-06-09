@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ua.bibusukraine.fitlifebot.cache.WeightHolder;
+import ua.bibusukraine.fitlifebot.model.RequestFieldMessage;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.model.Weight;
 import ua.bibusukraine.fitlifebot.repository.WeightRepository;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
-import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 
 import java.util.Optional;
 
@@ -44,7 +44,7 @@ public class RemoveWeightMessageStrategy implements TelegramMessageStrategy {
         Weight removedWeight = new Weight();
         removedWeight.setChatId(message.getChatId());
         weightHolder.putWeight(message.getChatId(), removedWeight);
-        SendMessage response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_WEIGHT_ID_MESSAGE);
+        SendMessage response = new RequestFieldMessage(message.getChatId().toString(), ENTER_WEIGHT_ID_MESSAGE);
         applicationEventPublisher.publishEvent(response);
     }
 
@@ -59,7 +59,7 @@ public class RemoveWeightMessageStrategy implements TelegramMessageStrategy {
 
     private void handleInvalidActivity(Message message) {
         weightHolder.removeWeight(message.getChatId());
-        SendMessage response = TelegramMessageUtil.buildSendMessage(message.getChatId(), WEIGHT_NOT_FOUND_MESSAGE);
+        SendMessage response = new SendMessage(message.getChatId().toString(), WEIGHT_NOT_FOUND_MESSAGE);
         WeightMessageStrategy weightsMessageStrategy = new WeightMessageStrategy(applicationEventPublisher);
         response.setReplyMarkup(weightsMessageStrategy.getReplyKeyboardMarkup());
         applicationEventPublisher.publishEvent(response);
@@ -68,7 +68,7 @@ public class RemoveWeightMessageStrategy implements TelegramMessageStrategy {
     private void removeActivity(Message message, Long activityId) {
         weightRepository.deleteById(activityId);
         weightHolder.removeWeight(message.getChatId());
-        SendMessage response = TelegramMessageUtil.buildSendMessage(message.getChatId(), WEIGHT_REMOVED_MESSAGE);
+        SendMessage response = new SendMessage(message.getChatId().toString(), WEIGHT_REMOVED_MESSAGE);
         WeightMessageStrategy weightsMessageStrategy = new WeightMessageStrategy(applicationEventPublisher);
         response.setReplyMarkup(weightsMessageStrategy.getReplyKeyboardMarkup());
         applicationEventPublisher.publishEvent(response);

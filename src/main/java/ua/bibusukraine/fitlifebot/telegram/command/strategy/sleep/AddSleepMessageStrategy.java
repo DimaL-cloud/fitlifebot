@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ua.bibusukraine.fitlifebot.cache.SleepHolder;
+import ua.bibusukraine.fitlifebot.model.RequestFieldMessage;
 import ua.bibusukraine.fitlifebot.model.Sleep;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.repository.SleepRepository;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
-import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -42,13 +42,13 @@ public class AddSleepMessageStrategy implements TelegramMessageStrategy {
             sleep = new Sleep();
             sleep.setChatId(message.getChatId());
             sleepHolder.putSleep(message.getChatId(), sleep);
-            response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_WENT_TO_SLEEP_MESSAGE);
+            response = new RequestFieldMessage(message.getChatId().toString(), ENTER_WENT_TO_SLEEP_MESSAGE);
         } else if (sleep.getWentToBed() == null) {
             response = handleInputWentToSleepTime(sleep, message);
         } else if (sleep.getWokeUp() == null) {
             response = handleInputWokeUpTime(sleep, message);
         } else {
-            response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), "Both times have already been entered.");
+            response = new RequestFieldMessage(message.getChatId().toString(), "Both times have already been entered.");
         }
         applicationEventPublisher.publishEvent(response);
     }
@@ -58,9 +58,9 @@ public class AddSleepMessageStrategy implements TelegramMessageStrategy {
         try {
             LocalDateTime wentToSleepTime = LocalDateTime.parse(input, DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy"));
             sleep.setWentToBed(wentToSleepTime);
-            return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_SPENT_TIME_MESSAGE);
+            return new RequestFieldMessage(message.getChatId().toString(), ENTER_SPENT_TIME_MESSAGE);
         } catch (DateTimeParseException e) {
-            return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), INCORRECT_INPUT_FORMAT_MESSAGE);
+            return new RequestFieldMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
         }
     }
 
@@ -72,12 +72,12 @@ public class AddSleepMessageStrategy implements TelegramMessageStrategy {
             sleep.setSleepTimeInMinutes(calculateTimeSleep(sleep.getWentToBed(), sleep.getWokeUp()));
             sleepRepository.save(sleep);
 
-            SendMessage response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), SLEEP_ADDED_MESSAGE);
+            SendMessage response = new RequestFieldMessage(message.getChatId().toString(), SLEEP_ADDED_MESSAGE);
             SleepMessageStrategy sleepMessageStrategy = new SleepMessageStrategy(applicationEventPublisher);
             response.setReplyMarkup(sleepMessageStrategy.getReplyKeyboardMarkup());
             return response;
         } catch (DateTimeParseException | IllegalArgumentException e) {
-            return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), INCORRECT_INPUT_FORMAT_MESSAGE);
+            return new RequestFieldMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
         }
     }
 

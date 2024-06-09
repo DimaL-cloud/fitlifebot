@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ua.bibusukraine.fitlifebot.cache.WeightHolder;
+import ua.bibusukraine.fitlifebot.model.RequestFieldMessage;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.model.Weight;
 import ua.bibusukraine.fitlifebot.repository.WeightRepository;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
-import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -41,7 +41,7 @@ public class AddWeightMessageStrategy implements TelegramMessageStrategy {
             weight = new Weight();
             weight.setChatId(message.getChatId());
             weightHolder.putWeight(message.getChatId(), weight);
-            SendMessage response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_DATE_WEIGHT_MESSAGE);
+            SendMessage response = new RequestFieldMessage(message.getChatId().toString(), ENTER_DATE_WEIGHT_MESSAGE);
             applicationEventPublisher.publishEvent(response);
         } else {
             handleInput(weight, message);
@@ -67,10 +67,10 @@ public class AddWeightMessageStrategy implements TelegramMessageStrategy {
             LocalDateTime dateTime = date.atStartOfDay();
             weight.setCreatedAt(dateTime);
 
-            SendMessage response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_WEIGHT_MESSAGE);
+            SendMessage response = new RequestFieldMessage(message.getChatId().toString(), ENTER_WEIGHT_MESSAGE);
             applicationEventPublisher.publishEvent(response);
         } catch (DateTimeParseException e) {
-            SendMessage retryMessage = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), INCORRECT_DATE_INPUT_FORMAT_MESSAGE);
+            SendMessage retryMessage = new RequestFieldMessage(message.getChatId().toString(), INCORRECT_DATE_INPUT_FORMAT_MESSAGE);
             applicationEventPublisher.publishEvent(retryMessage);
         }
     }
@@ -88,12 +88,12 @@ public class AddWeightMessageStrategy implements TelegramMessageStrategy {
 
             weightRepository.save(weight);
 
-            SendMessage response = TelegramMessageUtil.buildSendMessage(message.getChatId(), "Your weight has been successfully added: " + userWeight + " kg");
+            SendMessage response = new SendMessage(message.getChatId().toString(), "Your weight has been successfully added: " + userWeight + " kg");
             WeightMessageStrategy weightsMessageStrategy = new WeightMessageStrategy(applicationEventPublisher);
             response.setReplyMarkup(weightsMessageStrategy.getReplyKeyboardMarkup());
             applicationEventPublisher.publishEvent(response);
         } catch (NumberFormatException e) {
-            SendMessage retryMessage = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), INCORRECT_INPUT_FORMAT_MESSAGE);
+            SendMessage retryMessage = new RequestFieldMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
             applicationEventPublisher.publishEvent(retryMessage);
         }
     }

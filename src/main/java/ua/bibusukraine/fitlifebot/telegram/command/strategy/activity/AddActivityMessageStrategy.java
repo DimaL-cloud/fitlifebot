@@ -4,11 +4,11 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import ua.bibusukraine.fitlifebot.util.TelegramMessageUtil;
+import ua.bibusukraine.fitlifebot.cache.ActivityHolder;
 import ua.bibusukraine.fitlifebot.model.Activity;
+import ua.bibusukraine.fitlifebot.model.RequestFieldMessage;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.repository.ActivityRepository;
-import ua.bibusukraine.fitlifebot.cache.ActivityHolder;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
 
 import java.util.Optional;
@@ -44,7 +44,7 @@ public class AddActivityMessageStrategy implements TelegramMessageStrategy {
             activity = new Activity();
             activity.setChatId(message.getChatId());
             activityHolder.putActivity(message.getChatId(), activity);
-            response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_ACTIVITY_NAME_MESSAGE);
+            response = new RequestFieldMessage(message.getChatId().toString(), ENTER_ACTIVITY_NAME_MESSAGE);
         } else if (activity.getName() == null) {
             response = handleNameField(activity, message);
         } else if (activity.getBurnedCalories() == null) {
@@ -53,7 +53,7 @@ public class AddActivityMessageStrategy implements TelegramMessageStrategy {
             response = handleSpentTimeInMinutesField(activity, message);
         } else if (activity.getNotes() == null) {
             response = handleNotesField(activity, message);
-        } else response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ACTIVITY_ALREADY_ADDED);
+        } else response = new RequestFieldMessage(message.getChatId().toString(), ACTIVITY_ALREADY_ADDED);
         applicationEventPublisher.publishEvent(response);
     }
 
@@ -64,17 +64,17 @@ public class AddActivityMessageStrategy implements TelegramMessageStrategy {
 
     private SendMessage handleNameField(Activity activity, Message message) {
         activity.setName(message.getText());
-        return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_BURNED_CALORIES_MESSAGE);
+        return new RequestFieldMessage(message.getChatId().toString(), ENTER_BURNED_CALORIES_MESSAGE);
     }
 
     private SendMessage handleBurnedCaloriesField(Activity activity, Message message) {
         String input = message.getText();
         Optional<Double> optionalCalories = parseCalories(input);
         if (optionalCalories.isEmpty() || optionalCalories.get() <= 0) {
-            return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), INCORRECT_INPUT_FORMAT_MESSAGE);
+            return new RequestFieldMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
         }
         activity.setBurnedCalories(optionalCalories.get());
-        return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_SPENT_TIME_MESSAGE);
+        return new RequestFieldMessage(message.getChatId().toString(), ENTER_SPENT_TIME_MESSAGE);
     }
 
     private Optional<Double> parseCalories(String input) {
@@ -89,10 +89,10 @@ public class AddActivityMessageStrategy implements TelegramMessageStrategy {
         String input = message.getText();
         Optional<Integer> optionalMinutes = parseMinutes(input);
         if (optionalMinutes.isEmpty() || optionalMinutes.get() <= 0) {
-            return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), INCORRECT_INPUT_FORMAT_MESSAGE);
+            return new RequestFieldMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
         }
         activity.setSpentTimeInMinutes(optionalMinutes.get());
-        return TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ENTER_NOTES_MESSAGE);
+        return new RequestFieldMessage(message.getChatId().toString(), ENTER_NOTES_MESSAGE);
     }
 
     private Optional<Integer> parseMinutes(String input) {
@@ -107,7 +107,7 @@ public class AddActivityMessageStrategy implements TelegramMessageStrategy {
         activity.setNotes(message.getText());
         activityRepository.save(activity);
         activityHolder.removeActivity(message.getChatId());
-        SendMessage response = TelegramMessageUtil.buildRequestFieldMessage(message.getChatId(), ACTIVITY_ADDED_MESSAGE);
+        SendMessage response = new RequestFieldMessage(message.getChatId().toString(), ACTIVITY_ADDED_MESSAGE);
         ActivitiesMessageStrategy activitiesMessageStrategy = new ActivitiesMessageStrategy(applicationEventPublisher);
         response.setReplyMarkup(activitiesMessageStrategy.getReplyKeyboardMarkup());
         return response;
