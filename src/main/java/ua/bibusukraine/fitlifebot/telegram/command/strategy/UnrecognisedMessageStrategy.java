@@ -9,7 +9,7 @@ import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 @Component
 public class UnrecognisedMessageStrategy implements TelegramMessageStrategy {
 
-    private static final String UNRECOGNISED_MESSAGE = "Нерозпізнана команда";
+    private static final String UNRECOGNISED_MESSAGE = "Unrecognised command";
 
     private final ApplicationEventPublisher applicationEventPublisher;
 

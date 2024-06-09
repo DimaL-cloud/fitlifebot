@@ -16,10 +16,10 @@ import java.util.Optional;
 @Component
 public class RemoveActivityMessageStrategy implements TelegramMessageStrategy {
 
-    private static final String ENTER_ACTIVITY_ID_MESSAGE = "Введіть айді активності, яку ви хочете видалити";
-    private static final String INCORRECT_INPUT_FORMAT_MESSAGE = "Неправильний формат введення";
-    private static final String ACTIVITY_REMOVED_MESSAGE = "Активність успішно видалена";
-    private static final String ACTIVITY_NOT_FOUND_MESSAGE = "Активність з таким айді не знайдена";
+    private static final String ENTER_ACTIVITY_ID_MESSAGE = "Enter the ID of the activity you want to remove";
+    private static final String INCORRECT_INPUT_FORMAT_MESSAGE = "Incorrect input format";
+    private static final String ACTIVITY_REMOVED_MESSAGE = "Activity successfully removed";
+    private static final String ACTIVITY_NOT_FOUND_MESSAGE = "Activity with such ID not found";
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ActivityRepository activityRepository;

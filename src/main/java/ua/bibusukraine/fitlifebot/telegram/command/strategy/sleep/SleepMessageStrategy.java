@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 public class SleepMessageStrategy implements TelegramMessageStrategy {
 
-    private static final String CHOOSE_SLEEP_ACTION_TEXT = "В цьому розділі ви можете керувати своїм сном. Оберіть бажану дію:";
+    private static final String CHOOSE_SLEEP_ACTION_TEXT = "In this section you can manage your sleep. Choose an action";
 
     private final ApplicationEventPublisher applicationEventPublisher;
 

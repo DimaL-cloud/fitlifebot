@@ -22,7 +22,7 @@ import java.io.IOException;
 public class GetActivitiesMessageStrategy implements TelegramMessageStrategy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GetActivitiesMessageStrategy.class);
-    private static final String CREATE_FILE_ERROR_MESSAGE = "Помилка при створенні файлу";
+    private static final String CREATE_FILE_ERROR_MESSAGE = "Error creating the file";
     private final ActivityRepository activityRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ReportService reportService;

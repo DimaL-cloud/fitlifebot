@@ -16,10 +16,10 @@ import java.util.Optional;
 @Component
 public class RemoveSleepMessageStrategy implements TelegramMessageStrategy {
 
-    private static final String ENTER_SLEEP_ID_MESSAGE = "Введіть айді запису сна, яку ви хочете видалити";
-    private static final String INCORRECT_INPUT_FORMAT_MESSAGE = "Неправильний формат введення";
-    private static final String SLEEP_REMOVED_MESSAGE = "Запис сну успішно видалена";
-    private static final String SLEEP_NOT_FOUND_MESSAGE = "Запис сну з таким айді не знайдена";
+    private static final String ENTER_SLEEP_ID_MESSAGE = "Enter the ID of the sleep record you want to remove";
+    private static final String INCORRECT_INPUT_FORMAT_MESSAGE = "Incorrect input format";
+    private static final String SLEEP_REMOVED_MESSAGE = "Sleep record successfully removed";
+    private static final String SLEEP_NOT_FOUND_MESSAGE = "Sleep record with such ID not found";
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final SleepRepository sleepRepository;

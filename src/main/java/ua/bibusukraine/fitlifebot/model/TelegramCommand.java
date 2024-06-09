@@ -7,7 +7,7 @@ public enum TelegramCommand {
     START("/start"),
     ACTIVITIES("Активності \uD83C\uDFC0"),
     NUTRITION("Харчування \uD83C\uDF49"),
-    WEIGHT("Вага ⚖\uFE0F"),
+    WEIGHT("Вага ⚖️"),
     SLEEP("Сон \uD83D\uDE34"),
     ADD_ACTIVITY("Додати активність"),
     ADD_SLEEP("Додати сон"),

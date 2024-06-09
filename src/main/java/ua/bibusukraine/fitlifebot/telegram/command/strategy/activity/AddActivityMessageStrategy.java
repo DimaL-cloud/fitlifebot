@@ -16,13 +16,13 @@ import java.util.Optional;
 @Component
 public class AddActivityMessageStrategy implements TelegramMessageStrategy {
 
-    private static final String ENTER_ACTIVITY_NAME_MESSAGE = "Введіть назву активності";
-    private static final String ENTER_BURNED_CALORIES_MESSAGE = "Введіть кількість спалених калорій";
-    private static final String ENTER_SPENT_TIME_MESSAGE = "Введіть кількість витраченого часу в хвилинах";
-    private static final String ENTER_NOTES_MESSAGE = "Введіть замітки";
-    private static final String ACTIVITY_ADDED_MESSAGE = "Активність успішно додана";
-    private static final String INCORRECT_INPUT_FORMAT_MESSAGE = "Неправильний формат введення";
-    private static final String ACTIVITY_ALREADY_ADDED = "Активність вже додана.";
+    private static final String ENTER_ACTIVITY_NAME_MESSAGE = "Enter the activity name";
+    private static final String ENTER_BURNED_CALORIES_MESSAGE = "Enter the number of burned calories";
+    private static final String ENTER_SPENT_TIME_MESSAGE = "Enter the spent time in minutes";
+    private static final String ENTER_NOTES_MESSAGE = "Enter notes";
+    private static final String ACTIVITY_ADDED_MESSAGE = "Activity successfully added";
+    private static final String INCORRECT_INPUT_FORMAT_MESSAGE = "Incorrect input format";
+    private static final String ACTIVITY_ALREADY_ADDED = "Activity already added.";
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ActivityHolder activityHolder;

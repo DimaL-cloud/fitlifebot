@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class StartMessageStrategy implements TelegramMessageStrategy {
 
-    private static final String CHOOSE_CATEGORY_TEXT = "Оберіть категорію";
+    private static final String CHOOSE_CATEGORY_TEXT = "Choose a category";
 
     private final ApplicationEventPublisher applicationEventPublisher;
 

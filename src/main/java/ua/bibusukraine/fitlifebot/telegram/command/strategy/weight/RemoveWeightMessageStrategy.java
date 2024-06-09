@@ -16,9 +16,9 @@ import java.util.Optional;
 @Component
 public class RemoveWeightMessageStrategy implements TelegramMessageStrategy {
 
-    private static final String ENTER_WEIGHT_ID_MESSAGE = "Введіть айді запису ваги, яку ви хочете видалити";
-    private static final String WEIGHT_REMOVED_MESSAGE = "Запис ваги успішно видалена";
-    private static final String WEIGHT_NOT_FOUND_MESSAGE = "Запис ваги з таким айді не знайдена";
+    private static final String ENTER_WEIGHT_ID_MESSAGE = "Enter the ID of the weight record you want to remove";
+    private static final String WEIGHT_REMOVED_MESSAGE = "Weight record successfully removed";
+    private static final String WEIGHT_NOT_FOUND_MESSAGE = "Weight record with such ID not found";
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final WeightRepository weightRepository;

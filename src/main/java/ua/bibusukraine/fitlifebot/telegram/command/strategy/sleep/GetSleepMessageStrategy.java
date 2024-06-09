@@ -21,7 +21,7 @@ import java.io.IOException;
 @Component
 public class GetSleepMessageStrategy implements TelegramMessageStrategy {
     private static final Logger LOGGER = LoggerFactory.getLogger(GetSleepMessageStrategy.class);
-    private static final String CREATE_FILE_ERROR_MESSAGE = "Помилка при створенні файлу";
+    private static final String CREATE_FILE_ERROR_MESSAGE = "Error while creating file";
     private final SleepRepository sleepRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ReportService reportService;
