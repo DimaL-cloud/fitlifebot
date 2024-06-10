@@ -19,7 +19,10 @@ public enum TelegramCommand {
     GET_SLEEP_REPORT("Отримати звіт по записам сну"),
     GET_WEIGHT_REPORT("Отримати звіт по записам ваги"),
     BACK("Назад"),
-    UNRECOGNISED("Не впізнано");
+    UNRECOGNISED("Не впізнано"),
+    ADD_DISH("Додати страву"),
+    REMOVE_DISH("Видалити страву"),
+    GET_DISH_REPORT("Отримати звіт по їжі");
 
     private final String text;
 

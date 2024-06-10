@@ -36,6 +36,8 @@ public class TelegramMessageStrategyContext {
             command = switch (lastUserCommand) {
                 case ADD_ACTIVITY -> TelegramCommand.ADD_ACTIVITY;
                 case REMOVE_ACTIVITY -> TelegramCommand.REMOVE_ACTIVITY;
+                case ADD_DISH -> TelegramCommand.ADD_DISH;
+                case REMOVE_DISH -> TelegramCommand.REMOVE_DISH;
                 case ADD_SLEEP -> TelegramCommand.ADD_SLEEP;
                 case REMOVE_SLEEP -> TelegramCommand.REMOVE_SLEEP;
                 case ADD_WEIGHT -> TelegramCommand.ADD_WEIGHT;

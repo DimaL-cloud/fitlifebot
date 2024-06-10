@@ -18,3 +18,6 @@ spring:
 telegram:
   bot-name: fit_life_bot
   bot-token: 7373495110:AAF-ZJFP4R8UVI9NXsWpyfibSKdAk4YwDB8
+fatsecret:
+    clientId: a4d67b3c2ab3426ea2d81eaa976ca7d4
+    clientSecret: bac9cba8ac8a4fa8b6c83a3bf83d9899
