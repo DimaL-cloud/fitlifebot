@@ -9,26 +9,26 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "products")
-@ReportInclude(title = "products")
+@ReportInclude(title = "Products")
 public class Product {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  @ReportInclude(columnName = "Айді")
+  @ReportInclude(columnName = "Id")
   private Long id;
   @Column(name = "chat_id")
   private Long chatId;
   @Column(name = "calories")
-  @ReportInclude(columnName = "Калорійність")
+  @ReportInclude(columnName = "Calority")
   private Double calories;
   @Column(name = "name")
-  @ReportInclude(columnName = "Назва")
+  @ReportInclude(columnName = "Name")
   private String name;
   @Column(name = "notes")
-  @ReportInclude(columnName = "Нотатки")
+  @ReportInclude(columnName = "Notes")
   private String notes;
   @Column(name = "consumption_date_time")
-  @ReportInclude(columnName = "Час та дата вжитку")
+  @ReportInclude(columnName = "Time and date of consumption")
   private LocalDateTime consumptionDateTime;
   @Column(name = "fat")
   private Double fat;
