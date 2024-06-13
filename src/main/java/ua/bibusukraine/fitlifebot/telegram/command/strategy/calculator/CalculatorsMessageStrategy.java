@@ -1,4 +1,4 @@
-package ua.bibusukraine.fitlifebot.telegram.command.strategy;
+package ua.bibusukraine.fitlifebot.telegram.command.strategy.calculator;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -7,18 +7,19 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
+import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class StartMessageStrategy implements TelegramMessageStrategy {
+public class CalculatorsMessageStrategy implements TelegramMessageStrategy {
 
     private static final String CHOOSE_CATEGORY_TEXT = "Choose a category";
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public StartMessageStrategy(ApplicationEventPublisher applicationEventPublisher) {
+    public CalculatorsMessageStrategy(ApplicationEventPublisher applicationEventPublisher) {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
@@ -32,17 +33,14 @@ public class StartMessageStrategy implements TelegramMessageStrategy {
 
     @Override
     public TelegramCommand getCommand() {
-        return TelegramCommand.START;
+        return TelegramCommand.CALCULATORS;
     }
 
     private ReplyKeyboardMarkup getReplyKeyboardMarkup() {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
-        keyboard.add(getKeyboardRow(TelegramCommand.ACTIVITIES));
-        keyboard.add(getKeyboardRow(TelegramCommand.NUTRITION));
-        keyboard.add(getKeyboardRow(TelegramCommand.WEIGHT));
-        keyboard.add(getKeyboardRow(TelegramCommand.SLEEP));
-        keyboard.add(getKeyboardRow(TelegramCommand.CALCULATORS));
+        keyboard.add(getKeyboardRow(TelegramCommand.BMI));
+        keyboard.add(getKeyboardRow(TelegramCommand.BACK));
         keyboardMarkup.setKeyboard(keyboard);
         return keyboardMarkup;
     }

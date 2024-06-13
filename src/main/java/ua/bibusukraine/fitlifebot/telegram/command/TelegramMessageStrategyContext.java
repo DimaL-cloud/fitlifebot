@@ -41,6 +41,7 @@ public class TelegramMessageStrategyContext {
                 case ADD_WEIGHT -> TelegramCommand.ADD_WEIGHT;
                 case REMOVE_WEIGHT -> TelegramCommand.REMOVE_WEIGHT;
                 case GET_WEIGHT_REPORT -> TelegramCommand.GET_WEIGHT_REPORT;
+                case BMI -> TelegramCommand.BMI;
                 default -> command;
             };
         }
