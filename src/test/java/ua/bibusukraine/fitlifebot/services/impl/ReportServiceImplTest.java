@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.bibusukraine.fitlifebot.model.Product;
+import ua.bibusukraine.fitlifebot.service.impl.ReportServiceImpl;
 
 import java.util.Collections;
 
