@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -38,18 +39,16 @@ public class StartMessageStrategy implements TelegramMessageStrategy {
     private ReplyKeyboardMarkup getReplyKeyboardMarkup() {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
-        keyboard.add(getKeyboardRow(TelegramCommand.ACTIVITIES));
-        keyboard.add(getKeyboardRow(TelegramCommand.NUTRITION));
-        keyboard.add(getKeyboardRow(TelegramCommand.WEIGHT));
-        keyboard.add(getKeyboardRow(TelegramCommand.SLEEP));
+        keyboard.add(getKeyboardRow(TelegramCommand.ACTIVITIES, TelegramCommand.NUTRITION));
+        keyboard.add(getKeyboardRow(TelegramCommand.WEIGHT, TelegramCommand.SLEEP));
         keyboard.add(getKeyboardRow(TelegramCommand.CALCULATORS));
         keyboardMarkup.setKeyboard(keyboard);
         return keyboardMarkup;
     }
 
-    private KeyboardRow getKeyboardRow(TelegramCommand command) {
+    private KeyboardRow getKeyboardRow(TelegramCommand... commands) {
         KeyboardRow row = new KeyboardRow();
-        row.add(command.getText());
+        Arrays.stream(commands).forEach(c -> row.add(c.getText()));
         return row;
     }
 

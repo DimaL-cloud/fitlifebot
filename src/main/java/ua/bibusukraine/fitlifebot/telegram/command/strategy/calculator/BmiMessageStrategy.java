@@ -27,10 +27,14 @@ public class BmiMessageStrategy implements TelegramMessageStrategy {
             Obesity: BMI 30 or greater""";
 
     private final BmiDataHolder bmiDataHolder;
+    private final CalculatorsMessageStrategy calculatorsMessageStrategy;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public BmiMessageStrategy(BmiDataHolder bmiDataHolder, ApplicationEventPublisher applicationEventPublisher) {
+    public BmiMessageStrategy(BmiDataHolder bmiDataHolder,
+                              CalculatorsMessageStrategy calculatorsMessageStrategy,
+                              ApplicationEventPublisher applicationEventPublisher) {
         this.bmiDataHolder = bmiDataHolder;
+        this.calculatorsMessageStrategy = calculatorsMessageStrategy;
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
@@ -84,6 +88,7 @@ public class BmiMessageStrategy implements TelegramMessageStrategy {
                 bmiData.setHeight(height.get());
                 double bmi = calculateBmi(bmiData.getWeight(), bmiData.getHeight());
                 RequestFieldMessage response = new RequestFieldMessage(message.getChatId().toString(), String.format(BMI_RESULT_MESSAGE, bmi, getBmiCategory(bmi)));
+                response.setReplyMarkup(calculatorsMessageStrategy.getReplyKeyboardMarkup());
                 applicationEventPublisher.publishEvent(response);
                 bmiDataHolder.removeBmiData(message.getChatId());
             }

@@ -36,10 +36,11 @@ public class CalculatorsMessageStrategy implements TelegramMessageStrategy {
         return TelegramCommand.CALCULATORS;
     }
 
-    private ReplyKeyboardMarkup getReplyKeyboardMarkup() {
+    protected ReplyKeyboardMarkup getReplyKeyboardMarkup() {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
         keyboard.add(getKeyboardRow(TelegramCommand.BMI));
+        keyboard.add(getKeyboardRow(TelegramCommand.BMR));
         keyboard.add(getKeyboardRow(TelegramCommand.BACK));
         keyboardMarkup.setKeyboard(keyboard);
         return keyboardMarkup;

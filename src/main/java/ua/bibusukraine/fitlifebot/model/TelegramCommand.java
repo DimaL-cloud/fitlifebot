@@ -21,7 +21,8 @@ public enum TelegramCommand {
     BACK("Back"),
     UNRECOGNISED("Unrecognised"),
     CALCULATORS("Calculators \uD83D\uDCCA"),
-    BMI("BMI \uD83E\uDDCD\u200D♀\uFE0F");
+    BMI("Body Mass Index \uD83E\uDDCD\u200D♀️"),
+    BMR("Basal Metabolic Rate \uD83C\uDFCB️\u200D♂️");
 
     private final String text;
 
