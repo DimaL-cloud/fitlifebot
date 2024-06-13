@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class WhrData {
 
-    private Double waist; // in centimeters (cm)
-    private Double hips; // in centimeters (cm)
+    private Double waist;
+    private Double hips;
 
     public WhrData() {
     }
