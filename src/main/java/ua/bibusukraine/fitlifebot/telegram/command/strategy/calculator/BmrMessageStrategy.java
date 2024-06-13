@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ua.bibusukraine.fitlifebot.cache.BmrDataHolder;
 import ua.bibusukraine.fitlifebot.model.BmrData;
+import ua.bibusukraine.fitlifebot.model.RequestFieldMessage;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
 
@@ -14,7 +15,10 @@ import java.util.Optional;
 @Component
 public class BmrMessageStrategy implements TelegramMessageStrategy {
 
-    private static final String ENTER_WEIGHT_MESSAGE = "Enter your weight in kg";
+    private static final String ENTER_WEIGHT_MESSAGE = """
+            BMR estimates the number of calories your body needs at rest to maintain basic physiological functions.
+            
+            Enter your weight in kg""";
     private static final String ENTER_HEIGHT_MESSAGE = "Enter your height in cm";
     private static final String ENTER_AGE_MESSAGE = "Enter your age in years";
     private static final String ENTER_GENDER_MESSAGE = "Enter your gender (male/female)";
@@ -54,19 +58,19 @@ public class BmrMessageStrategy implements TelegramMessageStrategy {
     private void handleStartMessage(Message message) {
         BmrData bmrData = new BmrData();
         bmrDataHolder.putBmrData(message.getChatId(), bmrData);
-        SendMessage response = new SendMessage(message.getChatId().toString(), ENTER_WEIGHT_MESSAGE);
+        SendMessage response = new RequestFieldMessage(message.getChatId().toString(), ENTER_WEIGHT_MESSAGE);
         applicationEventPublisher.publishEvent(response);
     }
 
     private void handleWeightMessage(Message message, BmrData bmrData) {
         Optional<Double> weight = parseDouble(message.getText());
         if (weight.isEmpty() || weight.get() <= 0) {
-            SendMessage response = new SendMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
+            RequestFieldMessage response = new RequestFieldMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
             applicationEventPublisher.publishEvent(response);
         } else {
             bmrData.setWeight(weight.get());
             bmrDataHolder.putBmrData(message.getChatId(), bmrData);
-            SendMessage response = new SendMessage(message.getChatId().toString(), ENTER_HEIGHT_MESSAGE);
+            SendMessage response = new RequestFieldMessage(message.getChatId().toString(), ENTER_HEIGHT_MESSAGE);
             applicationEventPublisher.publishEvent(response);
         }
     }
@@ -74,12 +78,12 @@ public class BmrMessageStrategy implements TelegramMessageStrategy {
     private void handleHeightMessage(Message message, BmrData bmrData) {
         Optional<Double> height = parseDouble(message.getText());
         if (height.isEmpty() || height.get() <= 0) {
-            SendMessage response = new SendMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
+            SendMessage response = new RequestFieldMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
             applicationEventPublisher.publishEvent(response);
         } else {
             bmrData.setHeight(height.get());
             bmrDataHolder.putBmrData(message.getChatId(), bmrData);
-            SendMessage response = new SendMessage(message.getChatId().toString(), ENTER_AGE_MESSAGE);
+            SendMessage response = new RequestFieldMessage(message.getChatId().toString(), ENTER_AGE_MESSAGE);
             applicationEventPublisher.publishEvent(response);
         }
     }
@@ -87,12 +91,12 @@ public class BmrMessageStrategy implements TelegramMessageStrategy {
     private void handleAgeMessage(Message message, BmrData bmrData) {
         Optional<Integer> age = parseInteger(message.getText());
         if (age.isEmpty() || age.get() <= 0) {
-            SendMessage response = new SendMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
+            SendMessage response = new RequestFieldMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
             applicationEventPublisher.publishEvent(response);
         } else {
             bmrData.setAge(age.get());
             bmrDataHolder.putBmrData(message.getChatId(), bmrData);
-            SendMessage response = new SendMessage(message.getChatId().toString(), ENTER_GENDER_MESSAGE);
+            SendMessage response = new RequestFieldMessage(message.getChatId().toString(), ENTER_GENDER_MESSAGE);
             applicationEventPublisher.publishEvent(response);
         }
     }
@@ -100,7 +104,7 @@ public class BmrMessageStrategy implements TelegramMessageStrategy {
     private void handleGenderMessage(Message message, BmrData bmrData) {
         String gender = message.getText().trim().toLowerCase();
         if (!gender.equals(MALE) && !gender.equals(FEMALE)) {
-            SendMessage response = new SendMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
+            SendMessage response = new RequestFieldMessage(message.getChatId().toString(), INCORRECT_INPUT_FORMAT_MESSAGE);
             applicationEventPublisher.publishEvent(response);
         } else {
             bmrData.setGender(gender);

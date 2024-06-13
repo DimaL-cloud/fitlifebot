@@ -32,19 +32,8 @@ public class TelegramMessageStrategyContext {
     }
 
     private TelegramCommand resolveUnrecognisedCommand(TelegramCommand command, TelegramCommand lastUserCommand) {
-        if (command == TelegramCommand.UNRECOGNISED && lastUserCommand != null) {
-            command = switch (lastUserCommand) {
-                case ADD_ACTIVITY -> TelegramCommand.ADD_ACTIVITY;
-                case REMOVE_ACTIVITY -> TelegramCommand.REMOVE_ACTIVITY;
-                case ADD_SLEEP -> TelegramCommand.ADD_SLEEP;
-                case REMOVE_SLEEP -> TelegramCommand.REMOVE_SLEEP;
-                case ADD_WEIGHT -> TelegramCommand.ADD_WEIGHT;
-                case REMOVE_WEIGHT -> TelegramCommand.REMOVE_WEIGHT;
-                case GET_WEIGHT_REPORT -> TelegramCommand.GET_WEIGHT_REPORT;
-                case BMI -> TelegramCommand.BMI;
-                case BMR -> TelegramCommand.BMR;
-                default -> command;
-            };
+        if (command == TelegramCommand.UNRECOGNISED && lastUserCommand != null && lastUserCommand.requestsData()) {
+            command = lastUserCommand;
         }
         return command;
     }

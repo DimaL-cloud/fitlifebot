@@ -41,6 +41,7 @@ public class CalculatorsMessageStrategy implements TelegramMessageStrategy {
         List<KeyboardRow> keyboard = new ArrayList<>();
         keyboard.add(getKeyboardRow(TelegramCommand.BMI));
         keyboard.add(getKeyboardRow(TelegramCommand.BMR));
+        keyboard.add(getKeyboardRow(TelegramCommand.WHR));
         keyboard.add(getKeyboardRow(TelegramCommand.BACK));
         keyboardMarkup.setKeyboard(keyboard);
         return keyboardMarkup;

@@ -4,27 +4,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum TelegramCommand {
-    START("/start"),
-    ACTIVITIES("Activities \uD83C\uDFC0"),
-    NUTRITION("Nutrition \uD83C\uDF49"),
-    WEIGHT("Weight ⚖️"),
-    SLEEP("Sleep \uD83D\uDE34"),
-    ADD_ACTIVITY("Add activity"),
-    ADD_SLEEP("Add sleep"),
-    ADD_WEIGHT("Add weight"),
-    REMOVE_ACTIVITY("Remove activity"),
-    REMOVE_SLEEP("Remove sleep"),
-    REMOVE_WEIGHT("Remove weight"),
-    GET_ACTIVITIES_REPORT("Get activities report"),
-    GET_SLEEP_REPORT("Get sleep report"),
-    GET_WEIGHT_REPORT("Get weight report"),
-    BACK("Back"),
-    UNRECOGNISED("Unrecognised"),
-    CALCULATORS("Calculators \uD83D\uDCCA"),
-    BMI("Body Mass Index \uD83E\uDDCD\u200D♀️"),
-    BMR("Basal Metabolic Rate \uD83C\uDFCB️\u200D♂️");
+    START("/start", false),
+    ACTIVITIES("Activities \uD83C\uDFC0", false),
+    NUTRITION("Nutrition \uD83C\uDF49", false),
+    WEIGHT("Weight ⚖️", false),
+    SLEEP("Sleep \uD83D\uDE34", false),
+    ADD_ACTIVITY("Add activity", true),
+    ADD_SLEEP("Add sleep", true),
+    ADD_WEIGHT("Add weight", true),
+    REMOVE_ACTIVITY("Remove activity", true),
+    REMOVE_SLEEP("Remove sleep", true),
+    REMOVE_WEIGHT("Remove weight", true),
+    GET_ACTIVITIES_REPORT("Get activities report", false),
+    GET_SLEEP_REPORT("Get sleep report", false),
+    GET_WEIGHT_REPORT("Get weight report", true),
+    BACK("Back", false),
+    UNRECOGNISED("Unrecognised", false),
+    CALCULATORS("Calculators \uD83D\uDCCA", false),
+    BMI("Body Mass Index \uD83E\uDDCD\u200D♀️", true),
+    BMR("Basal Metabolic Rate \uD83C\uDFCB️\u200D♂️", true),
+    WHR("Waist-to-Hip Ratio \uD83E\uDD38\u200D♂️", true);
 
     private final String text;
+    private final boolean requestsData;
 
     private static final Map<String, TelegramCommand> lookup = new HashMap<>();
 
@@ -34,12 +36,17 @@ public enum TelegramCommand {
         }
     }
 
-    TelegramCommand(String text) {
+    TelegramCommand(String text, boolean requestsData) {
         this.text = text;
+        this.requestsData = requestsData;
     }
 
     public String getText() {
         return text;
+    }
+
+    public boolean requestsData() {
+        return requestsData;
     }
 
     public static TelegramCommand getTelegramCommandByText(String text) {

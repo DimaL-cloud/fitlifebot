@@ -22,9 +22,10 @@ public class BmiMessageStrategy implements TelegramMessageStrategy {
             Your BMI is %.2s. It is %s.
             
             Underweight: BMI < 18.5
-            Normal weight: BMI 18.5–24.9
-            Overweight: BMI 25–29.9
-            Obesity: BMI 30 or greater""";
+            Normal weight: 18.5 ≤ BMI < 25
+            Overweight: 25 ≤ BMI < 30
+            Obesity: BMI ≥ 30
+            """;
 
     private final BmiDataHolder bmiDataHolder;
     private final CalculatorsMessageStrategy calculatorsMessageStrategy;
@@ -87,7 +88,7 @@ public class BmiMessageStrategy implements TelegramMessageStrategy {
             } else {
                 bmiData.setHeight(height.get());
                 double bmi = calculateBmi(bmiData.getWeight(), bmiData.getHeight());
-                RequestFieldMessage response = new RequestFieldMessage(message.getChatId().toString(), String.format(BMI_RESULT_MESSAGE, bmi, getBmiCategory(bmi)));
+                SendMessage response = new SendMessage(message.getChatId().toString(), String.format(BMI_RESULT_MESSAGE, bmi, getBmiCategory(bmi)));
                 response.setReplyMarkup(calculatorsMessageStrategy.getReplyKeyboardMarkup());
                 applicationEventPublisher.publishEvent(response);
                 bmiDataHolder.removeBmiData(message.getChatId());
