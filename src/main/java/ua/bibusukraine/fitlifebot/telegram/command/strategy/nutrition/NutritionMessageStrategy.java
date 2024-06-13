@@ -14,7 +14,7 @@ import java.util.List;
 
 @Component
 public class NutritionMessageStrategy implements TelegramMessageStrategy {
-    private static final String CHOOSE_CATEGORY_TEXT = "У цьому розділі ви можете керувати харчуванням. Оберіть дію";
+    private static final String CHOOSE_CATEGORY_TEXT = "In this section you can manage your nutrition. Choose an action";
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
