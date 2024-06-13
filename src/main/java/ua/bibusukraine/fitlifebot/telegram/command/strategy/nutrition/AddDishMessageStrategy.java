@@ -21,12 +21,14 @@ import java.util.Objects;
 public class AddDishMessageStrategy extends NutritionMessageStrategy {
   private static final Logger LOG = LoggerFactory.getLogger(AddDishMessageStrategy.class);
   private static final String ENTER_PRODUCT_NAME = "Enter the product name:";
-  private static final String ENTER_PRODUCT_WEIGHT = "Enter the product weight:";
-  private static final String ENTER_CONSUMPTION_DATE = "Enter the time and fate of consumption in ISO format:";
+  private static final String ENTER_PRODUCT_WEIGHT = "Enter the product weight (in grams):";
+  private static final String ENTER_CONSUMPTION_DATE = "Enter the time and date of consumption in ISO format:";
   private static final String ENTER_NOTES = "Enter notes about the product";
   private static final String INCORRECT_INPUT_FORMAT = "Incorrect input format";
   private static final String SUCCESSFULLY_ADDED_PRODUCT = "You successfully added Your product";
   private static final String PRODUCT_ALREADY_EXIST = "The product is already added";
+  private static final String PRODUCT_NOT_FOUND = "Product not found, please enter another name";
+  private static final String ENTER_CALORIES = "Enter the calories for the product";
 
   private final ProductService productService;
   private final ProductHolder productHolder;
@@ -56,10 +58,27 @@ public class AddDishMessageStrategy extends NutritionMessageStrategy {
         product.setWeight(Double.parseDouble(message.getText()));
         response = new RequestFieldMessage(String.valueOf(message.getChatId()), ENTER_CONSUMPTION_DATE);
       } catch (NumberFormatException e) {
-        response = new SendMessage(String.valueOf(message.getChatId()), INCORRECT_INPUT_FORMAT);
-        response.setReplyMarkup(getReplyKeyboardMarkup());
+        response = new RequestFieldMessage(String.valueOf(message.getChatId()), INCORRECT_INPUT_FORMAT);
       }
-    } else if (Objects.isNull(product.getConsumptionDateTime())) {
+      try {
+        productService.fillProductComplexFields(product);
+      } catch (Exception e) {
+        response = new RequestFieldMessage(String.valueOf(message.getChatId()), PRODUCT_NOT_FOUND);
+        product.setName(null);
+        product.setWeight(null);
+      }
+      if (product.getCalories() == null) {
+        response = new RequestFieldMessage(String.valueOf(message.getChatId()), ENTER_CALORIES);
+      }
+    } else if (Objects.isNull(product.getCalories())) {
+      try {
+        product.setCalories(Double.parseDouble(message.getText()));
+        response = new RequestFieldMessage(String.valueOf(message.getChatId()), ENTER_CONSUMPTION_DATE);
+      } catch (NumberFormatException e) {
+        response = new RequestFieldMessage(String.valueOf(message.getChatId()), INCORRECT_INPUT_FORMAT);
+      }
+    }
+    else if (Objects.isNull(product.getConsumptionDateTime())) {
       try {
         product.setConsumptionDateTime(LocalDateTime.parse(message.getText(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         response = new RequestFieldMessage(String.valueOf(message.getChatId()), ENTER_NOTES);
@@ -69,17 +88,18 @@ public class AddDishMessageStrategy extends NutritionMessageStrategy {
       }
     } else if (Objects.isNull(product.getNotes())) {
       product.setNotes(message.getText());
-      productService.fillProductComplexFields(product);
       productService.saveProduct(product);
       productHolder.removeProductByChatId(message.getChatId());
       response = new SendMessage(String.valueOf(message.getChatId()), SUCCESSFULLY_ADDED_PRODUCT);
       response.setReplyMarkup(getReplyKeyboardMarkup());
       applicationEventPublisher.publishEvent(response);
+      return;
     } else {
       response = new SendMessage(String.valueOf(message.getChatId()), PRODUCT_ALREADY_EXIST);
       productHolder.removeProductByChatId(message.getChatId());
       response.setReplyMarkup(getReplyKeyboardMarkup());
       applicationEventPublisher.publishEvent(response);
+      return;
     }
     applicationEventPublisher.publishEvent(response);
   }

@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 public class ReportServiceImpl implements ReportService {
   private static final Logger LOG = LoggerFactory.getLogger(ReportServiceImpl.class);
-  private static final String DEFAULT_FILE_PATH = "activities.pdf";
+  private static final String DEFAULT_FILE_PATH = "report.pdf";
   private static final String FONT_PATH = "fonts/Ubuntu-Regular.ttf";
   private Font font;
 

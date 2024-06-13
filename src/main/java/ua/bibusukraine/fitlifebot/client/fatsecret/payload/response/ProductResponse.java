@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ProductResponse {
   private Long id;
@@ -96,6 +97,21 @@ public class ProductResponse {
 
     public Double getFat() {
       return fat;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+      if (this == object) return true;
+      if (object == null || getClass() != object.getClass()) return false;
+
+      ServingResponse that = (ServingResponse) object;
+
+      return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+      return id != null ? id.hashCode() : 0;
     }
   }
 }
