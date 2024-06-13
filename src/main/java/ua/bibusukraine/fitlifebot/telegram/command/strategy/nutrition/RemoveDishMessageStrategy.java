@@ -10,7 +10,7 @@ import ua.bibusukraine.fitlifebot.cache.ProductHolder;
 import ua.bibusukraine.fitlifebot.model.Product;
 import ua.bibusukraine.fitlifebot.model.RequestFieldMessage;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
-import ua.bibusukraine.fitlifebot.services.ProductService;
+import ua.bibusukraine.fitlifebot.service.ProductService;
 
 @Component
 public class RemoveDishMessageStrategy extends NutritionMessageStrategy {

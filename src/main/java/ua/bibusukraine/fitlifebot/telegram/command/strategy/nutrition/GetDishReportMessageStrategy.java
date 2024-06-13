@@ -11,8 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ua.bibusukraine.fitlifebot.model.Product;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
-import ua.bibusukraine.fitlifebot.services.ProductService;
-import ua.bibusukraine.fitlifebot.services.ReportService;
+import ua.bibusukraine.fitlifebot.service.ProductService;
+import ua.bibusukraine.fitlifebot.service.ReportService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
