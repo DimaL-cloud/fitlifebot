@@ -2,9 +2,8 @@ package ua.bibusukraine.fitlifebot.client.fatsecret.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import ua.bibusukraine.fitlifebot.deserializer.SingleValueAsListDeserializer;
+import ua.bibusukraine.fitlifebot.serialization.deserializer.SingleValueAsListDeserializer;
 
 import java.util.List;
 

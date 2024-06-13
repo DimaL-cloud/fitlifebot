@@ -10,32 +10,32 @@ import ua.bibusukraine.fitlifebot.annotation.ReportInclude;
 
 @Entity
 @Table(name = "activity")
-@ReportInclude(title = "Звіт по активностям")
+@ReportInclude(title = "Report")
 public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
-    @ReportInclude(columnName = "Айді")
+    @ReportInclude(columnName = "Id")
     private Long id;
 
     @Column(name = "chat_id", nullable = false)
     private Long chatId;
 
     @Column(name = "name", nullable = false)
-    @ReportInclude(columnName = "Назва")
+    @ReportInclude(columnName = "Name")
     private String name;
 
     @Column(name = "burned_calories")
-    @ReportInclude(columnName = "Кількість спалених калорій")
+    @ReportInclude(columnName = "Burned Calories")
     private Double burnedCalories;
 
     @Column(name = "spent_time_in_minutes")
-    @ReportInclude(columnName = "Витрачений час (хв)")
+    @ReportInclude(columnName = "Spent time (minutes)")
     private Integer spentTimeInMinutes;
 
     @Column(name = "notes")
-    @ReportInclude(columnName = "Замітки")
+    @ReportInclude(columnName = "Notes")
     private String notes;
 
     public Long getId() {

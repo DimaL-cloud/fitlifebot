@@ -1,4 +1,4 @@
-package ua.bibusukraine.fitlifebot.services;
+package ua.bibusukraine.fitlifebot.service;
 
 import com.itextpdf.text.DocumentException;
 

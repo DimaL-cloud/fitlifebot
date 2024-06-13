@@ -13,7 +13,7 @@ import ua.bibusukraine.fitlifebot.model.ReportState;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
 import ua.bibusukraine.fitlifebot.model.Weight;
 import ua.bibusukraine.fitlifebot.repository.WeightRepository;
-import ua.bibusukraine.fitlifebot.services.ReportService;
+import ua.bibusukraine.fitlifebot.service.ReportService;
 import ua.bibusukraine.fitlifebot.telegram.command.strategy.TelegramMessageStrategy;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package ua.bibusukraine.fitlifebot.services.impl;
+package ua.bibusukraine.fitlifebot.service.impl;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import ua.bibusukraine.fitlifebot.annotation.ReportInclude;
-import ua.bibusukraine.fitlifebot.services.ReportService;
+import ua.bibusukraine.fitlifebot.service.ReportService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,12 +20,11 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class ReportServiceImpl implements ReportService {
   private static final Logger LOG = LoggerFactory.getLogger(ReportServiceImpl.class);
-  private static final String DEFAULT_FILE_PATH = "activities.pdf";
+  private static final String DEFAULT_FILE_PATH = "report.pdf";
   private static final String FONT_PATH = "fonts/Ubuntu-Regular.ttf";
   private Font font;
 

@@ -10,7 +10,7 @@ import ua.bibusukraine.fitlifebot.cache.ProductHolder;
 import ua.bibusukraine.fitlifebot.model.Product;
 import ua.bibusukraine.fitlifebot.model.RequestFieldMessage;
 import ua.bibusukraine.fitlifebot.model.TelegramCommand;
-import ua.bibusukraine.fitlifebot.services.ProductService;
+import ua.bibusukraine.fitlifebot.service.ProductService;
 
 @Component
 public class RemoveDishMessageStrategy extends NutritionMessageStrategy {
@@ -18,7 +18,7 @@ public class RemoveDishMessageStrategy extends NutritionMessageStrategy {
   private static final String REQUEST_PRODUCT_ID = "Please enter the dish/product id for removal";
   private static final String INCORRECT_INPUT_FORMAT_MESSAGE = "Your message has the wrong format";
   private static final String PRODUCT_NOT_FOUND_MESSAGE = "Product not found in database";
-  private static final String SUCCESSFULLY_DELETED_MESSAGE = "YOu successfully deleted your product/dish";
+  private static final String SUCCESSFULLY_DELETED_MESSAGE = "You successfully deleted your product/dish";
   private final ProductService productService;
   private final ApplicationEventPublisher applicationEventPublisher;
   private final ProductHolder productHolder;

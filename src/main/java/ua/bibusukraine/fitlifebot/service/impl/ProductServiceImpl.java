@@ -1,4 +1,4 @@
-package ua.bibusukraine.fitlifebot.services.impl;
+package ua.bibusukraine.fitlifebot.service.impl;
 
 import org.springframework.stereotype.Service;
 import ua.bibusukraine.fitlifebot.client.fatsecret.AccessTokenHolder;
@@ -8,7 +8,7 @@ import ua.bibusukraine.fitlifebot.client.fatsecret.payload.response.AccessTokenR
 import ua.bibusukraine.fitlifebot.client.fatsecret.payload.response.ProductResponse;
 import ua.bibusukraine.fitlifebot.model.Product;
 import ua.bibusukraine.fitlifebot.repository.ProductRepository;
-import ua.bibusukraine.fitlifebot.services.ProductService;
+import ua.bibusukraine.fitlifebot.service.ProductService;
 
 import java.util.List;
 import java.util.Objects;

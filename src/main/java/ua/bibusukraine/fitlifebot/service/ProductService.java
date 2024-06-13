@@ -1,4 +1,4 @@
-package ua.bibusukraine.fitlifebot.services;
+package ua.bibusukraine.fitlifebot.service;
 
 import ua.bibusukraine.fitlifebot.model.Product;
 
